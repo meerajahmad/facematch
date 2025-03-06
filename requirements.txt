@@ -8,6 +8,6 @@ tqdm
 scikit-learn
 streamlit
 bing-image-downloader
-PIL
 pickle
 cv2
+python==3.7
