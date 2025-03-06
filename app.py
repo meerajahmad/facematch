@@ -21,37 +21,18 @@ st.set_page_config(page_title="Bollywood Celebrity Look-alike", layout="wide")
 st.markdown(
     """
     <style>
-        .stApp {
-            background-color: #121212;
-            color: white;
-        }
-        .title {
-            text-align: center;
-            font-size: 36px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        .subtitle {
-            text-align: center;
-            font-size: 18px;
-            margin-bottom: 30px;
-        }
-        .predict-btn {
-            background-color: #FF4B4B;
-            color: white;
-            border-radius: 10px;
-            font-size: 18px;
-            padding: 10px 20px;
-            text-align: center;
-            cursor: pointer;
-        }
+        .stApp { background-color: #121212; color: white; }
+        .title { text-align: center; font-size: 36px; font-weight: bold; margin-bottom: 10px; }
+        .subtitle { text-align: center; font-size: 18px; margin-bottom: 30px; }
+        .predict-btn { background-color: #FF4B4B; color: white; border-radius: 10px; font-size: 18px; padding: 10px 20px; }
+        .image-container { display: flex; justify-content: center; }
     </style>
     """,
     unsafe_allow_html=True
 )
 
 st.markdown('<p class="title">Which Bollywood celebrity do you look like?</p>', unsafe_allow_html=True)
-st.markdown('<p class="subtitle">Upload an image and click "Predict" to find your celebrity twin!</p>', unsafe_allow_html=True)
+st.markdown('<p class="subtitle">Upload an image and our deep learning model will find your celebrity twin!</p>', unsafe_allow_html=True)
 
 # Upload image
 uploaded_image = st.file_uploader("Choose a file", type=['jpg', 'png', 'jpeg'])
@@ -91,30 +72,32 @@ def recommend(feature_list, features):
     index_pos = sorted(enumerate(similarity), reverse=True, key=lambda x: x[1])[0][0]
     return index_pos, similarity[index_pos]
 
-# Prediction button
+# Prediction
 if uploaded_image is not None:
     if save_uploaded_image(uploaded_image):
-        display_image = Image.open(uploaded_image)
-        st.image(display_image, caption="Uploaded Image", width=300)
+        display_image = Image.open(uploaded_image).resize((300, 300))  # Resize uploaded image
+        features = extract_features(os.path.join('uploads', uploaded_image.name), model, detector)
 
-        # Button for prediction
-        if st.button("Predict", help="Click to find your celebrity look-alike!"):
-            features = extract_features(os.path.join('uploads', uploaded_image.name), model, detector)
+        if features is None:
+            st.error("No face detected! Please upload a clear image.")
+        else:
+            index_pos, confidence = recommend(feature_list, features)
+            predicted_actor = " ".join(filenames[index_pos].split('\\')[1].split('_'))
 
-            if features is None:
-                st.error("No face detected! Please upload a clear image.")
-            else:
-                index_pos, confidence = recommend(feature_list, features)
-                predicted_actor = " ".join(filenames[index_pos].split('\\')[1].split('_'))
+            # Load and resize predicted image
+            predicted_image = Image.open(filenames[index_pos]).resize((300, 300))
 
-                # Layout with columns
-                col1, col2 = st.columns(2)
+            # Layout with columns
+            col1, col2 = st.columns(2)
 
-                with col1:
-                    st.subheader(f"You look like {predicted_actor}!")
-                    st.image(filenames[index_pos], width=300)
+            with col1:
+                st.subheader("Your Uploaded Image")
+                st.image(display_image, width=300)
 
-                with col2:
-                    # Progress bar for match confidence
-                    st.progress(int(confidence * 100))
-                    st.write(f"Match Confidence: **{int(confidence * 100)}%**")
+            with col2:
+                st.subheader(f"You Look Like {predicted_actor}!")
+                st.image(predicted_image, width=300)
+
+                # Progress bar for match confidence
+                st.progress(int(confidence * 100))
+                st.write(f"Match Confidence: **{int(confidence * 100)}%**")
