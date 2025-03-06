@@ -1,2 +1,9 @@
 streamlit
-requests
+numpy
+opencv-python
+keras
+tensorflow
+mtcnn
+pickle-mixin
+scikit-learn
+Pillow
