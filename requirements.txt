@@ -1,13 +1,14 @@
 streamlit
 numpy
 opencv-python-headless
-tensorflow==2.15.0
-keras==2.15.0
+tensorflow==2.10.0
+keras==2.10.0
 mtcnn
 pickle-mixin
 scikit-learn
 Pillow
 keras-applications
+keras-preprocessing
 git+https://github.com/rcmalli/keras-vggface.git
-keras_preprocessing
+
 
