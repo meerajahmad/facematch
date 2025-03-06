@@ -6,4 +6,5 @@ pillow
 tensorflow
 mtcnn
 numpy
+requests
 
