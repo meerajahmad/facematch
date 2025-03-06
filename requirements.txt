@@ -62,7 +62,6 @@ scikit-learn==1.0.2
 scipy==1.7.3
 six==1.17.0
 smmap==5.0.2
--e git+https://git.heroku.com/facematch.git@a273631a1acf0359b197a02920b6a7411589593f#egg=src
 streamlit==1.23.1
 tenacity==8.2.3
 tensorboard==2.11.2
