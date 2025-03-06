@@ -1,6 +1,8 @@
 tensorflow==2.13.0
 keras==2.13.1
 keras-vggface==0.6
+keras_applications==1.0.8
+keras_preprocessing==1.1.2
 mtcnn==0.1.1
 numpy==1.23.5
 opencv-python==4.8.0.76
