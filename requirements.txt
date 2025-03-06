@@ -1,11 +1,11 @@
 streamlit
 numpy
-keras==2.4.3
+keras
 tensorflow
-mtcnn==0.1.0
+mtcnn
 pickle-mixin
 scikit-learn
 Pillow
 keras-vggface==0.6
-keras_applications==1.0.8
+keras_applications
 keras_preprocessing
